@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { registerRoute } from "../utils/APIRoutes";
 
 function Register() {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -16,7 +17,7 @@ function Register() {
   });
   const toastOptions = {
     position: "bottom-right",
-    autoClose: 8000,
+    autoClose: 6000,
     pauseOnHover: true,
     draggable: true,
     theme: "dark",
@@ -30,6 +31,12 @@ function Register() {
         email,
         password,
       });
+      if (response.data.status === false) {
+        toast.error(response.data.msg, toastOptions);
+      }
+      if (response.data.status === true) {
+        navigate("/");
+      }
     }
   };
   const handleValidation = () => {
@@ -46,9 +53,9 @@ function Register() {
         toastOptions
       );
       return false;
-    } else if (password.length < 8) {
+    } else if (password.length < 3) {
       toast.error(
-        "Password should be equal or greater than 8 characters.",
+        "Password should be equal or greater than 3 characters.",
         toastOptions
       );
       return false;
