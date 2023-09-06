@@ -24,12 +24,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (handleValidation()) {
-      const { username, email, password, confirmPassword } = values;
+      const { username, email, password } = values;
       const response = await axios.post(registerRoute, {
         username,
         email,
         password,
-        confirmPassword,
       });
     }
   };
