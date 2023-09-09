@@ -1,0 +1,23 @@
+.container-welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.header-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.robot {
+  height: 250px;
+  width: 250px;
+}
+h1 {
+  font-size: 50px;
+  color: rgb(159, 31, 244);
+}
+h2 {
+  font-size: 30px;
+  color: white;
+}
