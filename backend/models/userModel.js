@@ -25,13 +25,10 @@ var userSchema = new mongoose.Schema(
       type: String,
       default: "user",
     },
-    isAvatarImageSet: {
-      type: Boolean,
-      default: false,
-    },
-    avatarImage: {
+    avatar: {
       type: String,
-      default: "",
+      default:
+        "https://cdn.pixabay.com/photo/2017/09/01/00/15/png-2702691_640.png",
     },
     refreshToken: {
       type: String,

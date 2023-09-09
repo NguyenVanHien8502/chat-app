@@ -56,8 +56,7 @@ const loginUser = asyncHandler(async (req, res) => {
           _id: findUser?._id,
           username: findUser?.username,
           email: findUser?.email,
-          isAvatarImageSet: findUser?.isAvatarImageSet,
-          avatarImage: findUser?.avatarImage,
+          avatar: findUser?.avatar,
           token: generateToken(findUser?._id),
         },
       });
@@ -74,8 +73,12 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const getAllUser = asyncHandler(async (req, res) => {
   try {
+    const { _id } = req.user;
     const allUser = await User.find();
-    res.json(allUser);
+    const allUserExceptMe = await allUser.filter(
+      (user) => user._id.toString() !== _id.toString()
+    );
+    res.json(allUserExceptMe);
   } catch (error) {
     throw new Error(error);
   }
