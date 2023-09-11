@@ -1,0 +1,22 @@
+.chat-container {
+  display: grid;
+  grid-template-rows: 10% 75% 15%;
+}
+.chat-header {
+  border-bottom: 5px;
+  border-color: rgb(235, 164, 77);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-left: 20px;
+}
+.user-detail {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 5px;
+}
+.chat-messages {
+  background-color: brown;
+}

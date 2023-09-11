@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwtToken");
 const { generateRefreshToken } = require("../config/refreshToken");
+const jwt = require("jsonwebtoken");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { username, email } = req.body;
@@ -58,6 +59,7 @@ const loginUser = asyncHandler(async (req, res) => {
           email: findUser?.email,
           avatar: findUser?.avatar,
           token: generateToken(findUser?._id),
+          refreshToken: refreshToken,
         },
       });
     } else {
@@ -69,6 +71,21 @@ const loginUser = asyncHandler(async (req, res) => {
   } catch (error) {
     throw new Error(error);
   }
+});
+
+const handleRefreshToken = asyncHandler(async (req, res) => {
+  const cookie = req.cookies;
+  if (!cookie?.refreshToken) throw new Error("No Refresh Token in cookies");
+  const refreshToken = cookie.refreshToken;
+  const user = await User.findOne({ refreshToken: refreshToken });
+  if (!user)
+    throw new Error("No Refresh Token present in database or not matched");
+  jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
+    if (err || user?.id !== decoded?.id)
+      throw new Error("There is something error with refresh token");
+    const newToken = generateToken(user?._id);
+    res.json(newToken);
+  });
 });
 
 const getAllUser = asyncHandler(async (req, res) => {
@@ -129,6 +146,50 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
+const logout = asyncHandler(async (req, res) => {
+  const cookie = req.cookies;
+  const { _id } = req.user;
+  try {
+    if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
+    const refreshToken = cookie.refreshToken;
+    const currentUser = await User.findOne({
+      refreshToken: refreshToken,
+      _id: _id,
+    });
+    if (!currentUser) {
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+      });
+      res.json({
+        msg: "RefreshToken and _id not matched for user",
+        status: true,
+      });
+    }
+    await User.findOneAndUpdate(
+      {
+        refreshToken: refreshToken,
+      },
+      {
+        refreshToken: "",
+      },
+      {
+        new: true,
+      }
+    );
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+    });
+    res.json({
+      msg: "Logout successfully",
+      status: true,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -136,4 +197,6 @@ module.exports = {
   getaUser,
   updateUser,
   deleteUser,
+  logout,
+  handleRefreshToken,
 };

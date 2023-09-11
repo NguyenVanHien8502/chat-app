@@ -33,6 +33,8 @@ function Login() {
       }
       if (response.data.status === true) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        document.cookie =
+          "refreshToken = " + JSON.stringify(response.data.user.refreshToken);
         navigate("/");
       }
     }

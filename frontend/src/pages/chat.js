@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { getAllUsers } from "../utils/APIRoutes";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
+import ChatContainer from "../components/ChatContainer";
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -42,12 +43,18 @@ export default function Chat() {
 
   return (
     <>
-      <Container>
-        <div className="container">
-          <Contacts contacts={contacts} changeChat={handleChangeChat} />
-          {currentChat ? <div>hello</div> : <Welcome />}
-        </div>
-      </Container>
+      {currentUser && (
+        <Container>
+          <div className="container">
+            <Contacts contacts={contacts} changeChat={handleChangeChat} />
+            {currentChat ? (
+              <ChatContainer currentChat={currentChat} />
+            ) : (
+              <Welcome />
+            )}
+          </div>
+        </Container>
+      )}
     </>
   );
 }
