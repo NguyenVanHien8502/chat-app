@@ -1,6 +1,7 @@
 import React from "react";
 import "./styles.css";
 import Logout from "../Logout";
+import ChatInput from "../ChatInput";
 
 export default function ChatContainer({ currentChat }) {
   return (
@@ -13,7 +14,7 @@ export default function ChatContainer({ currentChat }) {
         <Logout />
       </div>
       <div className="chat-messages"></div>
-      <div className="chat-input"></div>
+      <ChatInput />
     </div>
   );
 }

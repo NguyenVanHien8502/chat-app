@@ -69,8 +69,8 @@ const Container = styled.div`
   align-items: center;
   background-color: #131324;
   .container {
-    height: 85vh;
-    width: 85vw;
+    height: 80vh;
+    width: 80vw;
     background-color: #00000076;
     display: grid;
     grid-template-columns: 25% 75%;
