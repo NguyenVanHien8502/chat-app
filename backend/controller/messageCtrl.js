@@ -32,12 +32,14 @@ const addMsg = asyncHandler(async (req, res) => {
 const getAllMsg = asyncHandler(async (req, res) => {
   try {
     const { _id } = req.user;
-    const { receiver } = req.body;
+    const { opponent } = req.body;
     const currentUser = await User.findById(_id);
     const allMsg = await Message.find({
-      sender: currentUser?._id,
-      receiver: receiver,
-    }).sort({ updatedAt: 1 });
+      $or: [
+        { sender: currentUser?._id, receiver: opponent },
+        { sender: opponent, receiver: currentUser?._id },
+      ],
+    }).sort({ updatedAt: 1 }); //updatedAt:1 là sắp xếp tăng dần, -1 là sắp xếp nhỏ dần
     res.json(allMsg);
   } catch (error) {
     throw new Error(error);

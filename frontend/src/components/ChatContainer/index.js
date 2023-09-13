@@ -3,10 +3,23 @@ import "./styles.css";
 import Logout from "../Logout";
 import ChatInput from "../ChatInput";
 import Messages from "../Messages";
+import axios from "axios";
+import { addMsgRoute } from "../../utils/APIRoutes";
 
-export default function ChatContainer({ currentChat }) {
-  const handleSendMsg = (msg) => {
-    alert(msg);
+export default function ChatContainer({ currentChat, currentUser }) {
+  const handleSendMsg = async (msg) => {
+    await axios.post(
+      `${addMsgRoute}`,
+      {
+        message: msg,
+        receiver: currentChat._id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      }
+    );
   };
   return (
     <div className="chat-container">
@@ -17,7 +30,7 @@ export default function ChatContainer({ currentChat }) {
         </div>
         <Logout />
       </div>
-      <Messages />
+      <Messages currentChat={currentChat} currentUser={currentUser} />
       <ChatInput handleSendMsg={handleSendMsg} />
     </div>
   );
