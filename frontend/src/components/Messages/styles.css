@@ -18,7 +18,6 @@
 } */
 .message.sender {
   display: flex;
-  /* flex-direction: row-reverse; */
   align-items: center;
   justify-content: end;
   padding: 0 10px;
@@ -38,6 +37,13 @@
   flex-direction: row-reverse;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.content.msg-receiver {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 .img-msg {

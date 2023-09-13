@@ -1,6 +1,7 @@
 .chat-container {
   display: grid;
   grid-template-rows: 10% 75% 15%;
+  overflow: hidden;
 }
 .chat-header {
   border-bottom: 5px;

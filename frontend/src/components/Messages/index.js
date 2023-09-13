@@ -24,33 +24,45 @@ export default function Messages({ currentChat, currentUser }) {
   }, [currentChat]);
   return (
     <div className="message-container">
-      {messages && messages.length > 0
-        ? messages.map((message, index) => (
+      {messages && messages.length > 0 ? (
+        messages.map((message, index) => (
+          <div
+            key={index}
+            className={`message ${
+              message.sender === currentUser._id ? "sender" : "receiver"
+            }`}
+          >
             <div
-              key={index}
-              className={`message ${
-                message.sender === currentUser._id ? "sender" : "receiver"
+              className={`content ${
+                message.sender === currentUser._id
+                  ? "msg-sender"
+                  : "msg-receiver"
               }`}
             >
-              <div
-                className={`content ${
-                  message.sender === currentUser._id ? "msg-sender" : "msg-receiver"
-                }`}
-              >
-                <img
-                  src={
-                    message.sender === currentUser._id
-                      ? `${currentUser.avatar}`
-                      : `${currentChat.avatar}`
-                  }
-                  alt=""
-                  className="img-msg"
-                />
-                <p>{message.message}</p>
-              </div>
+              <img
+                src={
+                  message.sender === currentUser._id
+                    ? `${currentUser.avatar}`
+                    : `${currentChat.avatar}`
+                }
+                alt=""
+                className="img-msg"
+              />
+              <p>{message.message}</p>
             </div>
-          ))
-        : "No messages available, let's start"}
+          </div>
+        ))
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <h1 style={{ color: "white" }}>No messages available, let's start</h1>
+        </div>
+      )}
     </div>
   );
 }
