@@ -5,9 +5,8 @@ import ChatInput from "../ChatInput";
 import Messages from "../Messages";
 
 export default function ChatContainer({ currentChat }) {
-  const handleSendMsg = () => {
-    console.log("db");
-    alert("dbrr");
+  const handleSendMsg = (msg) => {
+    alert(msg);
   };
   return (
     <div className="chat-container">

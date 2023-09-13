@@ -4,6 +4,7 @@ const app = express();
 const dotenv = require("dotenv").config();
 const PORT = process.env.PORT || 6000;
 const authRouter = require("./routes/userRoute");
+const messageRouter = require("./routes/messageRoute");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
@@ -36,6 +37,7 @@ app.use(
 );
 
 app.use("/api/user", authRouter);
+app.use("/api/message", messageRouter);
 
 app.get("/image/:image", getImage);
 app.post(
