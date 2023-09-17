@@ -46,4 +46,24 @@ const getAllMsg = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addMsg, getAllMsg };
+const deleteAllMessage = asyncHandler(async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { opponent } = req.body;
+    const currentUser = await User.findById(_id);
+    const deleteMsg = await Message.deleteMany({
+      $or: [
+        { sender: currentUser?._id, receiver: opponent },
+        { sender: opponent, receiver: currentUser?._id },
+      ],
+    });
+    res.json({
+      msg: "Delete Successfully",
+      status: true,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = { addMsg, getAllMsg, deleteAllMessage };

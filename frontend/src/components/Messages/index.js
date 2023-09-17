@@ -1,54 +1,44 @@
-import axios from "axios";
 import "./styles.css";
-import React, { useEffect, useState } from "react";
-import { getAllMsgRoute } from "../../utils/APIRoutes";
+import React, { useEffect, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-export default function Messages({ currentChat, currentUser }) {
-  const [messages, setMessages] = useState([]);
+export default function Messages({ currentChat, currentUser, messages }) {
+  const scrollRef = useRef();
+
+  //cái này dùng để nó tự cuộn đến đoạn tin nhắn cuối cùng
   useEffect(() => {
-    const fetchMessages = async () => {
-      const { data } = await axios.post(
-        `${getAllMsgRoute}`,
-        {
-          opponent: currentChat?._id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${currentUser.token}`,
-          },
-        }
-      );
-      setMessages(data);
-    };
-    fetchMessages();
-  }, [currentChat]);
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <div className="message-container">
       {messages && messages.length > 0 ? (
         messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${
-              message.sender === currentUser._id ? "sender" : "receiver"
-            }`}
-          >
+          <div ref={scrollRef} key={uuidv4()}>
             <div
-              className={`content ${
-                message.sender === currentUser._id
-                  ? "msg-sender"
-                  : "msg-receiver"
+              key={index}
+              className={`message ${
+                message.sender === currentUser._id ? "sender" : "receiver"
               }`}
             >
-              <img
-                src={
+              <div
+                className={`content ${
                   message.sender === currentUser._id
-                    ? `${currentUser.avatar}`
-                    : `${currentChat.avatar}`
-                }
-                alt=""
-                className="img-msg"
-              />
-              <p>{message.message}</p>
+                    ? "msg-sender"
+                    : "msg-receiver"
+                }`}
+              >
+                <img
+                  src={
+                    message.sender === currentUser._id
+                      ? `${currentUser.avatar}`
+                      : `${currentChat.avatar}`
+                  }
+                  alt=""
+                  className="img-msg"
+                />
+                <p>{message.message}</p>
+              </div>
             </div>
           </div>
         ))
